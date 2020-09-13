@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Rooms</title>
+</head>
+<body>
+<b>Logged in as : </b> {{ me.username }} <br/>
+<b>Login</b><br/>
+	Click the user to log as them<br/>
+	<a href="/user1">user1</a> . 
+	<a href="/user2">user2</a> . 
+	<a href="/user3">user3</a> . 
+	<a href="/user4">user4</a> . 
+	<a href="/user5">user5</a> . 
+	<a href="/user6">user6</a> . 
+	<a href="/user7">user7</a> . 
+	<a href="/user8">user8</a> . 
+	<a href="/user9">user9</a> . 
+	<a href="/user10">user10</a> . 
+	
+	<br/><br/>
+<hr/>
+    Create new post<br>
+	<form action="" method="POST">
+	{% csrf_token %}
+    <input name="name" id="room-name-input" type="text" size="100"><br>
+    <button type="submit" class="btn btn-primary">Create post</button>
+</form><br/><br/>
+<b>Created posts</b><br/>
+{% for post in posts %}
+<a href="p/{{ post.pk }}">{{ post.name }}</a><br/>
+
+{% endfor %}
+</body>
+</html>

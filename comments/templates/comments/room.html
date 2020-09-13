@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+</head>
+<body>
+{{ room_name.name}}
+
+<br/>
+<br/>
+<br/>
+   <form action="" method="post">
+   {% csrf_token %}
+    <input id="chat-message-input" type="text" name="name" size="100"><br><br>
+	<div id="typing-display"></div><br/>
+	<div id="notification"></div>
+    <input id="chat-message-submit" type="button" value="Send">
+    </form>
+    <script>
+        const roomName ={{ room_name.pk }} ;
+	
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/'
+            + roomName
+            + '/'
+        );
+ function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+   }
+        chatSocket.onmessage = async function(e) {
+            const data = JSON.parse(e.data);
+			console.log(data);
+			if (data.message.typing=="true"){
+			if(data.message.me != '{{ currentuser.pk }}' ) {
+			document.querySelector('#typing-display').innerHTML += "{{currentuser.username}} is Typing...<br/>";
+			await sleep(10000);
+			document.querySelector('#typing-display').innerHTML = "";
+			}
+			}else{
+            document.querySelector('#notification').value += (data.message.message + '\n');
+        };
+}
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+				"typing" : '',
+				
+				'me' : '{{ currentuser.pk }}'
+				
+            }));
+            messageInputDom.value = '';
+        };
+		
+		document.getElementById("chat-message-input").addEventListener("keyup", typing);
+
+function typing(){
+if(document.getElementById('chat-message-input').value.length > 0){
+chatSocket.send(JSON.stringify({
+                'message': '',
+				"typing" : "true",
+				'me' : '{{ currentuser.pk }}'
+            }));
+}
+}
+
+    </script>
+	
+	<script>
+	
+	 const roomName ={{ room_name.pk }} ;
+	
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/'
+            + roomName
+            + '/'
+        );
+ function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+   }
+        chatSocket.onmessage = async function(e) {
+            const data = JSON.parse(e.data);
+			console.log(data);
+			if (data.message.typing=="true"){
+			if(data.message.me != '{{ currentuser.pk }}' ) {
+			document.querySelector('#typing-display').innerHTML += "{{currentuser.username}} is Typing...<br/>";
+			await sleep(10000);
+			document.querySelector('#typing-display').innerHTML = "";
+			}
+			}else{
+            document.querySelector('#notification').value += (data.message.message + '\n');
+        };
+}
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+				"typing" : '',
+				
+				'me' : '{{ currentuser.pk }}'
+				
+            }));
+            messageInputDom.value = '';
+        };
+		
+		document.getElementById("chat-message-input").addEventListener("keyup", typing);
+
+function typing(){
+if(document.getElementById('chat-message-input').value.length > 0){
+chatSocket.send(JSON.stringify({
+                'message': '',
+				"typing" : "true",
+				'me' : '{{ currentuser.pk }}',
+				
+            }));
+}
+}
+
+</body>
+</html>
