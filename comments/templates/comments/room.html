@@ -14,11 +14,11 @@
    {% csrf_token %}
     <input id="chat-message-input" type="text" name="name" size="100"><br><br>
 	<div id="typing-display"></div><br/>
-	<div id="notification"></div>
+	<h1 id="notification"></h1>
     <input id="chat-message-submit" type="button" value="Send">
     </form>
     <script>
-        const roomName ={{ room_name.pk }} ;
+        const roomName ={{ room_name }} ;
 	
         const chatSocket = new WebSocket(
             'ws://'
@@ -35,7 +35,7 @@
 			console.log(data);
 			if (data.message.typing=="true"){
 			if(data.message.me != '{{ currentuser.pk }}' ) {
-			document.querySelector('#typing-display').innerHTML += "{{currentuser.username}} is Typing...<br/>";
+			document.querySelector('#typing-display').innerHTML = "Typing...<br/>";
 			await sleep(10000);
 			document.querySelector('#typing-display').innerHTML = "";
 			}
@@ -54,18 +54,7 @@
             }
         };
 
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message,
-				"typing" : '',
-				
-				'me' : '{{ currentuser.pk }}'
-				
-            }));
-            messageInputDom.value = '';
-        };
+      
 		
 		document.getElementById("chat-message-input").addEventListener("keyup", typing);
 
@@ -83,67 +72,32 @@ chatSocket.send(JSON.stringify({
 	
 	<script>
 	
-	 const roomName ={{ room_name.pk }} ;
+	 const roomName1 ={{ currentuser.pk }} ;
 	
-        const chatSocket = new WebSocket(
+        const notSocket = new WebSocket(
             'ws://'
             + window.location.host
-            + '/ws/'
-            + roomName
+            + '/ws/not/'
+            + roomName1
             + '/'
         );
  function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
    }
-        chatSocket.onmessage = async function(e) {
+        notSocket.onmessage = async function(e) {
             const data = JSON.parse(e.data);
 			console.log(data);
-			if (data.message.typing=="true"){
-			if(data.message.me != '{{ currentuser.pk }}' ) {
-			document.querySelector('#typing-display').innerHTML += "{{currentuser.username}} is Typing...<br/>";
-			await sleep(10000);
-			document.querySelector('#typing-display').innerHTML = "";
+			if(data.message.by != '{{ currentuser.pk }}' ){
+            document.querySelector('#notification').innerHTML = "Notification received";
 			}
-			}else{
-            document.querySelector('#notification').value += (data.message.message + '\n');
-        };
+        
 }
-        chatSocket.onclose = function(e) {
+        notSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
         };
 
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
-
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message,
-				"typing" : '',
-				
-				'me' : '{{ currentuser.pk }}'
-				
-            }));
-            messageInputDom.value = '';
-        };
-		
-		document.getElementById("chat-message-input").addEventListener("keyup", typing);
-
-function typing(){
-if(document.getElementById('chat-message-input').value.length > 0){
-chatSocket.send(JSON.stringify({
-                'message': '',
-				"typing" : "true",
-				'me' : '{{ currentuser.pk }}',
-				
-            }));
-}
-}
+        
+</script>
 
 </body>
 </html>

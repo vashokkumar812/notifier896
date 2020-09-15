@@ -19,11 +19,11 @@ def index(request):
     return render(request, "comments/index.html", context)
     
 def room(request, room_name):
-    room_name = post.objects.get(pk=room_name)
+    currentpost = post.objects.get(pk=room_name)
     if request.method == 'POST':
         form = commentform(request.POST or None)       
     # check if form data is valid 
-        ano = comment(name=request.POST['name'],by = request.user, of = room_name)# save the form data to model 
+        ano = comment(name=request.POST['name'],by = request.user, of = currentpost)# save the form data to model 
         ano.save() 
     form = commentform()  
     context={}
