@@ -25,7 +25,7 @@ SECRET_KEY = 'uv=38*ko#!w812_k$d8lv6)lje=51lp&oiyean0+g_5wv@akv!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://notifier896.herokuapp.com/']
 
 
 # Application definition
