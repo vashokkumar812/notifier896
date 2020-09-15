@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['https://notifier896.herokuapp.com/']
 
 
+WSGI_APPLICATION = 'arun.wsgi.application'
+
 # Application definition
 
 INSTALLED_APPS = [
