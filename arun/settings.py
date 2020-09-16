@@ -129,17 +129,6 @@ CHANNEL_LAYERS={
      }
 }
 
-import os
-from urllib.parse import urlparse
 
-
-DEBUG = False
-ALLOWED_HOSTS = ['notifier896.herokuapp.com']
-SECRET_KEY = os.environ.get('SECRET_KEY', 'arun')  
-
-import dj_database_url
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
-DATABASES['default']['CONN_MAX_AGE'] = 500
 
 django_heroku.settings(locals())
