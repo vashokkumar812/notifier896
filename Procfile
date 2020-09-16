@@ -1,1 +1,1 @@
-web: gunicorn arun.wsgi --log-file -
+web: daphne arun.asgi:application --port $PORT --bind 0.0.0.0
