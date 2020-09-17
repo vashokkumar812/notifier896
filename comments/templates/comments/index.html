@@ -5,7 +5,8 @@
     <title>Chat Rooms</title>
 </head>
 <body>
-<b>Logged in as : </b> {{ me.username }} <br/>
+<h1 id="notification"></h1><br/>
+<b>Logged in as : </b> {{ currentuser.username }} <br/>
 <b>Login</b><br/>
 	Click the user to log as them<br/>
 	<a href="/user1">user1</a> . 
@@ -32,5 +33,36 @@
 <a href="p/{{ post.pk }}">{{ post.name }}</a><br/>
 
 {% endfor %}
+
+
+
+	<script>
+	
+	 const roomName1 ={{ currentuser.pk }} ;
+	
+        const notSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/not/'
+            + roomName1
+            + '/'
+        );
+ function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+   }
+        notSocket.onmessage = async function(e) {
+            const data = JSON.parse(e.data);
+			console.log(data);
+			if(data.message.by != '{{ currentuser.pk }}' ){
+            document.querySelector('#notification').innerHTML = "Notification received";
+			}
+        
+}
+        notSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        
+</script>
 </body>
 </html>

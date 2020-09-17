@@ -14,8 +14,10 @@ def index(request):
         ano.save() 
     form = postform()  
     posts = post.objects.all()
-    context={"posts" : posts,"me" : request.user}
-    
+    context ={}
+    if request.user:
+        context['currentuser'] = request.user
+    context["posts"] = posts
     return render(request, "comments/index.html", context)
     
 def room(request, room_name):

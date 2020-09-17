@@ -36,7 +36,7 @@
 			if (data.message.typing=="true"){
 			if(data.message.me != '{{ currentuser.pk }}' ) {
 			document.querySelector('#typing-display').innerHTML = "Typing...<br/>";
-			await sleep(10000);
+			await sleep(2500);
 			document.querySelector('#typing-display').innerHTML = "";
 			}
 			}else{

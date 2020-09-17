@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'arun'
+SECRET_KEY = 'uv=38*ko#!w812_k$d8lv6)lje=51lp&oiyean0+g_5wv@akv!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://notifier896.herokuapp.com/']
+ALLOWED_HOSTS = []
 
 
 WSGI_APPLICATION = 'arun.wsgi.application'
@@ -128,7 +128,5 @@ CHANNEL_LAYERS={
         "BACKEND": "channels.layers.InMemoryChannelLayer"
      }
 }
-
-
 
 django_heroku.settings(locals())
